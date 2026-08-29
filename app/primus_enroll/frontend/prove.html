@@ -43,10 +43,24 @@
     }
 
     function goBack() {
+      show("Proof saved. Switching back to your VoiceSense tab…", "ok");
+      back.hidden = false;
+      try {
+        if (window.opener && !window.opener.closed) {
+          window.opener.focus();
+          window.close();
+        }
+      } catch (e) {}
       const dest = (cfg && cfg.return_url) || (
-        "http://127.0.0.1:8502/?verified=1" + (sid ? "&sid=" + encodeURIComponent(sid) : "")
+        "http://localhost:8502/?verified=1" + (sid ? "&sid=" + encodeURIComponent(sid) : "")
       );
-      setTimeout(function () { window.location.replace(dest); }, 400);
+      setTimeout(function () {
+        if (window.opener && !window.opener.closed) {
+          try { window.close(); } catch (e2) {}
+          return;
+        }
+        window.location.replace(dest);
+      }, 500);
     }
 
     function followFrom(obj) {

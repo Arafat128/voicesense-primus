@@ -38,6 +38,7 @@ from src.provenance import collect_provenance
 try:
     from app.notices import render_flash, set_flash
     from app.privacy_ui import (
+        adopt_query_sid_unlock,
         browser_unlocked,
         consume_pending_extension_proof,
         render_export_receipt,
@@ -48,6 +49,7 @@ try:
 except ImportError:
     from notices import render_flash, set_flash  # type: ignore
     from privacy_ui import (  # type: ignore
+        adopt_query_sid_unlock,
         browser_unlocked,
         consume_pending_extension_proof,
         render_export_receipt,
@@ -223,8 +225,10 @@ st.markdown(
 )
 
 st.info(DISCLAIMER)
+adopt_query_sid_unlock()
 if st.query_params.get("verified") == "1":
     consume_pending_extension_proof()
+    adopt_query_sid_unlock()
     if browser_unlocked():
         try:
             st.query_params.clear()

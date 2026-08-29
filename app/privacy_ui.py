@@ -26,6 +26,8 @@ from src.enrollment import (
     save_attestation_meta,
     save_enrollment,
     save_parse_debug,
+    save_sid_unlock,
+    load_sid_unlock,
     x_follow_profile_url,
 )
 from src.extension_bridge import (
@@ -62,8 +64,37 @@ def _commit_enrollment(record: Dict[str, Any]) -> Dict[str, Any]:
     st.session_state["enrollment"] = merged
     st.session_state["live_unlocked"] = enrollment_unlocks_app(merged)
     # Disk copy is debug/receipt only. It must not unlock other browsers.
-    save_enrollment({**merged, "session_sid": _ensure_browser_sid()})
+    sid = _ensure_browser_sid()
+    save_enrollment({**merged, "session_sid": sid})
+    if st.session_state["live_unlocked"]:
+        save_sid_unlock(sid, merged)
     return merged
+
+
+def _voicesense_public_origin() -> str:
+    host = ""
+    try:
+        host = str(st.context.headers.get("Host") or "").strip()
+    except Exception:
+        host = ""
+    if not host:
+        host = "localhost:8502"
+    return f"http://{host}"
+
+
+def adopt_query_sid_unlock() -> None:
+    """If this tab arrived with ?sid= after Primus, unlock it even if it is a new session."""
+    if browser_unlocked():
+        return
+    qsid = str(st.query_params.get("sid") or "").strip()
+    if not qsid:
+        return
+    rec = load_sid_unlock(qsid)
+    if not rec or not enrollment_unlocks_app(rec):
+        return
+    st.session_state["vs_sid"] = qsid
+    st.session_state["enrollment"] = rec
+    st.session_state["live_unlocked"] = True
 
 
 def render_privacy_banner() -> bool:
@@ -212,8 +243,11 @@ def consume_pending_extension_proof() -> None:
         return
     mine = _ensure_browser_sid()
     proof_sid = str(pending.get("sid") or "")
-    if proof_sid != mine:
+    query_sid = str(st.query_params.get("sid") or "")
+    if proof_sid and proof_sid not in (mine, query_sid):
         return
+    if proof_sid and query_sid == proof_sid:
+        st.session_state["vs_sid"] = proof_sid
     marker = hashlib.sha256(
         json.dumps(pending, sort_keys=True, default=str).encode("utf-8")
     ).hexdigest()
@@ -233,6 +267,7 @@ def render_follow_gate(*, key_prefix: str = "live") -> bool:
     App ID, secret, and template IDs are never shown.
     """
     consume_pending_extension_proof()
+    adopt_query_sid_unlock()
     settings = primus_settings()
     handle = settings.get("x_follow_handle") or "its_perseus_1"
     follow_url = x_follow_profile_url()
@@ -262,7 +297,9 @@ def render_follow_gate(*, key_prefix: str = "live") -> bool:
             "att_mode": settings["att_mode"],
             "addition_params": {},
             "sid": _ensure_browser_sid(),
-            "return_url": f"http://127.0.0.1:8502/?verified=1&sid={_ensure_browser_sid()}",
+            "return_url": (
+                f"{_voicesense_public_origin()}/?verified=1&sid={_ensure_browser_sid()}"
+            ),
             "flows": {
                 "x_follow": {
                     "template_id": settings["x_follow_template_id"],

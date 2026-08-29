@@ -22,6 +22,7 @@ ENROLLMENT_SCHEMA = "voicesense.enrollment.v1"
 ENROLLMENT_DIR = ROOT / ".voicesense_local"
 ENROLLMENT_PATH = ENROLLMENT_DIR / "enrollment.json"
 RECIPIENT_PATH = ENROLLMENT_DIR / "recipient.txt"
+SID_UNLOCK_DIR = ENROLLMENT_DIR / "unlocks"
 LAST_ATTESTATION_PATH = ENROLLMENT_DIR / "last_attestation_meta.json"
 LAST_PARSE_DEBUG_PATH = ENROLLMENT_DIR / "last_parse_debug.json"
 
@@ -160,6 +161,35 @@ def save_enrollment(record: Dict[str, Any]) -> Dict[str, Any]:
 def clear_enrollment() -> None:
     if ENROLLMENT_PATH.exists():
         ENROLLMENT_PATH.unlink()
+
+
+def save_sid_unlock(sid: str, record: Dict[str, Any]) -> None:
+    """Remember a successful proof for this browser sid so a return tab can adopt it."""
+    token = (sid or "").strip()
+    if not token or len(token) < 16:
+        return
+    SID_UNLOCK_DIR.mkdir(parents=True, exist_ok=True)
+    payload = dict(record)
+    payload["schema"] = ENROLLMENT_SCHEMA
+    (SID_UNLOCK_DIR / f"{token}.json").write_text(
+        json.dumps(payload, indent=2) + "\n", encoding="utf-8"
+    )
+
+
+def load_sid_unlock(sid: str) -> Optional[Dict[str, Any]]:
+    token = (sid or "").strip()
+    if not token or len(token) < 16:
+        return None
+    path = SID_UNLOCK_DIR / f"{token}.json"
+    if not path.exists():
+        return None
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    if not isinstance(data, dict) or data.get("schema") != ENROLLMENT_SCHEMA:
+        return None
+    return data
 
 
 def _sha256_text(value: str) -> str:
