@@ -1,0 +1,159 @@
+{
+  "dataset_key": "english_uci",
+  "display_name": "UCI Parkinsons (English)",
+  "language": "English",
+  "n_samples": 195,
+  "n_features": 22,
+  "n_subjects": 32,
+  "class_counts": {
+    "PD": 147,
+    "HC": 48
+  },
+  "split": {
+    "train_samples": 152,
+    "test_samples": 43,
+    "train_subjects": 25,
+    "test_subjects": 7,
+    "method": "GroupShuffleSplit 80/20 (subject/speaker aware)",
+    "random_state": 42
+  },
+  "models": {
+    "random_forest": {
+      "metrics": {
+        "accuracy": 0.7209302325581395,
+        "precision": 0.8064516129032258,
+        "recall": 0.8064516129032258,
+        "f1": 0.8064516129032258,
+        "confusion_matrix": [
+          [
+            6,
+            6
+          ],
+          [
+            6,
+            25
+          ]
+        ],
+        "roc_auc": 0.7540322580645161,
+        "cv_f1_mean": 0.8394765646794046,
+        "cv_f1_std": 0.06685223801158545,
+        "classification_report": "              precision    recall  f1-score   support\n\n          HC     0.5000    0.5000    0.5000        12\n          PD     0.8065    0.8065    0.8065        31\n\n    accuracy                         0.7209        43\n   macro avg     0.6532    0.6532    0.6532        43\nweighted avg     0.7209    0.7209    0.7209        43\n"
+      },
+      "artifact": "D:\\fugu\\Thesis\\pd_screening\\models\\english_uci__random_forest.joblib",
+      "top_features": [
+        {
+          "feature": "PPE",
+          "importance": 0.146507688017744
+        },
+        {
+          "feature": "spread1",
+          "importance": 0.12533871094173074
+        },
+        {
+          "feature": "MDVP:APQ",
+          "importance": 0.08654283320209757
+        },
+        {
+          "feature": "Shimmer:APQ5",
+          "importance": 0.066391881617571
+        },
+        {
+          "feature": "MDVP:Shimmer",
+          "importance": 0.060849244137257036
+        },
+        {
+          "feature": "MDVP:Fo(Hz)",
+          "importance": 0.05871657124847067
+        },
+        {
+          "feature": "MDVP:Fhi(Hz)",
+          "importance": 0.05210891057475627
+        },
+        {
+          "feature": "Shimmer:DDA",
+          "importance": 0.04776865307208257
+        },
+        {
+          "feature": "spread2",
+          "importance": 0.04754182219540344
+        },
+        {
+          "feature": "MDVP:Shimmer(dB)",
+          "importance": 0.04186588216084836
+        },
+        {
+          "feature": "Shimmer:APQ3",
+          "importance": 0.034942673177308536
+        },
+        {
+          "feature": "HNR",
+          "importance": 0.02925724159307045
+        },
+        {
+          "feature": "MDVP:Flo(Hz)",
+          "importance": 0.02603569233645656
+        },
+        {
+          "feature": "NHR",
+          "importance": 0.023413974039075053
+        },
+        {
+          "feature": "RPDE",
+          "importance": 0.021998150328354442
+        }
+      ]
+    },
+    "svm_rbf": {
+      "metrics": {
+        "accuracy": 0.8372093023255814,
+        "precision": 0.8333333333333334,
+        "recall": 0.967741935483871,
+        "f1": 0.8955223880597015,
+        "confusion_matrix": [
+          [
+            6,
+            6
+          ],
+          [
+            1,
+            30
+          ]
+        ],
+        "roc_auc": 0.739247311827957,
+        "cv_f1_mean": 0.8623301324439845,
+        "cv_f1_std": 0.047427768712651995,
+        "classification_report": "              precision    recall  f1-score   support\n\n          HC     0.8571    0.5000    0.6316        12\n          PD     0.8333    0.9677    0.8955        31\n\n    accuracy                         0.8372        43\n   macro avg     0.8452    0.7339    0.7636        43\nweighted avg     0.8400    0.8372    0.8219        43\n"
+      },
+      "artifact": "D:\\fugu\\Thesis\\pd_screening\\models\\english_uci__svm_rbf.joblib",
+      "top_features": []
+    }
+  },
+  "disclaimer": "This tool is a research screening support system only. It is NOT a medical diagnosis. Final decisions must be made by qualified clinicians.",
+  "feature_names": [
+    "MDVP:Fo(Hz)",
+    "MDVP:Fhi(Hz)",
+    "MDVP:Flo(Hz)",
+    "MDVP:Jitter(%)",
+    "MDVP:Jitter(Abs)",
+    "MDVP:RAP",
+    "MDVP:PPQ",
+    "Jitter:DDP",
+    "MDVP:Shimmer",
+    "MDVP:Shimmer(dB)",
+    "Shimmer:APQ3",
+    "Shimmer:APQ5",
+    "MDVP:APQ",
+    "Shimmer:DDA",
+    "NHR",
+    "HNR",
+    "RPDE",
+    "DFA",
+    "spread1",
+    "spread2",
+    "D2",
+    "PPE"
+  ],
+  "best_model": "svm_rbf",
+  "holdout_samples_path": "D:\\fugu\\Thesis\\pd_screening\\models\\english_uci__holdout_samples.csv",
+  "app_default_model": "random_forest"
+}

@@ -1,0 +1,112 @@
+{
+  "english_uci": {
+    "display_name": "UCI Parkinsons (English)",
+    "best_model": "svm_rbf",
+    "app_default_model": "random_forest",
+    "split": {
+      "train_samples": 152,
+      "test_samples": 43,
+      "train_subjects": 25,
+      "test_subjects": 7,
+      "method": "GroupShuffleSplit 80/20 (subject/speaker aware)",
+      "random_state": 42
+    },
+    "models": {
+      "random_forest": {
+        "accuracy": 0.7209302325581395,
+        "precision": 0.8064516129032258,
+        "recall": 0.8064516129032258,
+        "f1": 0.8064516129032258,
+        "confusion_matrix": [
+          [
+            6,
+            6
+          ],
+          [
+            6,
+            25
+          ]
+        ],
+        "roc_auc": 0.7540322580645161,
+        "cv_f1_mean": 0.8394765646794046,
+        "cv_f1_std": 0.06685223801158545,
+        "classification_report": "              precision    recall  f1-score   support\n\n          HC     0.5000    0.5000    0.5000        12\n          PD     0.8065    0.8065    0.8065        31\n\n    accuracy                         0.7209        43\n   macro avg     0.6532    0.6532    0.6532        43\nweighted avg     0.7209    0.7209    0.7209        43\n"
+      },
+      "svm_rbf": {
+        "accuracy": 0.8372093023255814,
+        "precision": 0.8333333333333334,
+        "recall": 0.967741935483871,
+        "f1": 0.8955223880597015,
+        "confusion_matrix": [
+          [
+            6,
+            6
+          ],
+          [
+            1,
+            30
+          ]
+        ],
+        "roc_auc": 0.739247311827957,
+        "cv_f1_mean": 0.8623301324439845,
+        "cv_f1_std": 0.047427768712651995,
+        "classification_report": "              precision    recall  f1-score   support\n\n          HC     0.8571    0.5000    0.6316        12\n          PD     0.8333    0.9677    0.8955        31\n\n    accuracy                         0.8372        43\n   macro avg     0.8452    0.7339    0.7636        43\nweighted avg     0.8400    0.8372    0.8219        43\n"
+      }
+    }
+  },
+  "bengali_bensparx": {
+    "display_name": "BenSParX (Bengali)",
+    "best_model": "random_forest",
+    "app_default_model": "random_forest",
+    "split": {
+      "train_samples": 723,
+      "test_samples": 177,
+      "train_subjects": 96,
+      "test_subjects": 24,
+      "method": "GroupShuffleSplit 80/20 (subject/speaker aware)",
+      "random_state": 42
+    },
+    "models": {
+      "random_forest": {
+        "accuracy": 0.9378531073446328,
+        "precision": 0.9534883720930233,
+        "recall": 0.9213483146067416,
+        "f1": 0.9371428571428572,
+        "confusion_matrix": [
+          [
+            84,
+            4
+          ],
+          [
+            7,
+            82
+          ]
+        ],
+        "roc_auc": 0.9866573033707865,
+        "cv_f1_mean": 0.9305267038834728,
+        "cv_f1_std": 0.02518959899785019,
+        "classification_report": "              precision    recall  f1-score   support\n\n          HC     0.9231    0.9545    0.9385        88\n          PD     0.9535    0.9213    0.9371        89\n\n    accuracy                         0.9379       177\n   macro avg     0.9383    0.9379    0.9378       177\nweighted avg     0.9384    0.9379    0.9378       177\n"
+      },
+      "svm_rbf": {
+        "accuracy": 0.9322033898305084,
+        "precision": 0.963855421686747,
+        "recall": 0.898876404494382,
+        "f1": 0.9302325581395349,
+        "confusion_matrix": [
+          [
+            85,
+            3
+          ],
+          [
+            9,
+            80
+          ]
+        ],
+        "roc_auc": 0.9666751787538305,
+        "cv_f1_mean": 0.9321339244623209,
+        "cv_f1_std": 0.020095131038323343,
+        "classification_report": "              precision    recall  f1-score   support\n\n          HC     0.9043    0.9659    0.9341        88\n          PD     0.9639    0.8989    0.9302        89\n\n    accuracy                         0.9322       177\n   macro avg     0.9341    0.9324    0.9321       177\nweighted avg     0.9342    0.9322    0.9321       177\n"
+      }
+    }
+  }
+}

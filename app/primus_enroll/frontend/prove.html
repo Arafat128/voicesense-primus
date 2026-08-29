@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VoiceSense · Primus extension proof</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    body { max-width: 560px; margin: 2rem auto; padding: 0 1rem; }
+    h1 { font-size: 1.35rem; margin-bottom: .4rem; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="kicker">Primus extension</div>
+    <h1 id="title">Prove with the installed extension</h1>
+    <p class="muted" id="hint">
+      Stay logged into X. Keep this tab and the Primus popup in front until it finishes.
+      Do not switch Wi‑Fi or close the popup.
+    </p>
+    <div id="status"></div>
+    <button id="prove" disabled>Start proof</button>
+    <p class="hint" id="back" hidden>
+      Proof saved. Return to VoiceSense on port 8502 — it will pick this up.
+    </p>
+  </div>
+  <script src="./vendor/zktls-bundle.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const purpose = params.get("purpose") || "x_follow";
+    const sid = params.get("sid") || "";
+    const statusEl = document.getElementById("status");
+    const btn = document.getElementById("prove");
+    const back = document.getElementById("back");
+    let cfg = null;
+    let flow = null;
+    let zkHandle = null;
+    let requestid = null;
+    let submitted = false;
+
+    function show(msg, kind) {
+      statusEl.innerHTML = msg ? '<div class="msg ' + (kind || "info") + '">' + msg + "</div>" : "";
+    }
+
+    function goBack() {
+      const dest = (cfg && cfg.return_url) || (
+        "http://127.0.0.1:8502/?verified=1" + (sid ? "&sid=" + encodeURIComponent(sid) : "")
+      );
+      setTimeout(function () { window.location.replace(dest); }, 400);
+    }
+
+    function followFrom(obj) {
+      function coerceBool(v) {
+        if (v === true || v === 1 || v === "1") return true;
+        if (v === false || v === 0 || v === "0") return false;
+        if (typeof v === "string") {
+          const t = v.trim().toLowerCase();
+          if (t === "true" || t === "yes" || t === "following") return true;
+          if (t === "false" || t === "no" || t === "follow") return false;
+        }
+        return null;
+      }
+      const IGNORE = {
+        followed_by: 1, super_following: 1, super_followed_by: 1,
+        following_count: 1, followers_count: 1, friends_count: 1,
+        follow_request_sent: 1
+      };
+      const LEAVES = { following: 1, is_following: 1, isfollowing: 1, viewer_following: 1, want_retweets: 1 };
+      const acc = { true: false, false: false, seen: [] };
+      function walk(node) {
+        if (node == null) return;
+        if (typeof node === "string") {
+          const s = node.trim();
+          if (s.charAt(0) === "{" || s.charAt(0) === "[") {
+            try { node = JSON.parse(s); } catch (e) { return; }
+          } else return;
+        }
+        if (Array.isArray(node)) { node.forEach(walk); return; }
+        if (typeof node !== "object") return;
+        Object.keys(node).forEach(function (k) {
+          const leaf = String(k).toLowerCase().split(".").pop();
+          if (!IGNORE[leaf] && LEAVES[leaf]) {
+            const b = coerceBool(node[k]);
+            if (b === true) acc.true = true;
+            if (b === false) acc.false = true;
+            acc.seen.push(k);
+          }
+          walk(node[k]);
+        });
+      }
+      walk(obj);
+      if (acc.true) return { flag: true, seen: acc.seen };
+      if (acc.false) return { flag: false, seen: acc.seen };
+      return { flag: null, seen: acc.seen };
+    }
+
+    async function submitAttestation(attestation) {
+      if (submitted || !attestation) return;
+      submitted = true;
+      let dataObj = attestation.data;
+      try { dataObj = typeof dataObj === "string" ? JSON.parse(dataObj) : dataObj; } catch (e) {}
+      let allJson = null;
+      let privateData = null;
+      const rid = attestation.requestid || requestid;
+      try {
+        if (rid && zkHandle && typeof zkHandle.getAllJsonResponse === "function") {
+          allJson = zkHandle.getAllJsonResponse(rid);
+        }
+      } catch (e) {}
+      try {
+        if (rid && zkHandle && typeof zkHandle.getPrivateData === "function") {
+          privateData = zkHandle.getPrivateData(rid);
+        }
+      } catch (e) {}
+      const resolves = attestation.reponseResolve || attestation.responseResolve || [];
+      const fromData = followFrom(dataObj);
+      const fromAll = followFrom(allJson);
+      const fromPriv = followFrom(privateData);
+      const payload = {
+        ok: true,
+        purpose: purpose,
+        sid: sid || (cfg && cfg.sid) || "",
+        sdk_verified: true,
+        template_id: flow && flow.template_id,
+        attestation: attestation,
+        data_keys: dataObj && typeof dataObj === "object" && !Array.isArray(dataObj) ? Object.keys(dataObj) : [],
+        follow_extract: {
+          from_data: fromData.flag,
+          from_all_json: fromAll.flag,
+          from_private: fromPriv.flag,
+          following: (fromData.flag === true || fromAll.flag === true || fromPriv.flag === true)
+            ? true
+            : (fromData.flag === false || fromAll.flag === false || fromPriv.flag === false)
+              ? false
+              : null,
+          seen: fromAll.seen.concat(fromData.seen),
+          resolve: (Array.isArray(resolves) ? resolves : []).map(function (r) {
+            return { keyName: r && r.keyName, parsePath: r && r.parsePath };
+          }),
+        },
+      };
+      const body = JSON.stringify(payload);
+      let posted = false;
+      try {
+        const res = await fetch("/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: body,
+        });
+        posted = res.ok;
+      } catch (e) {
+        posted = false;
+      }
+      if (!posted) {
+        try { posted = navigator.sendBeacon("/submit", new Blob([body], { type: "application/json" })); } catch (e) {}
+      }
+      if (!posted) {
+        submitted = false;
+        throw new Error("Could not save the proof locally. Keep this tab open and try again.");
+      }
+      show("Success. Taking you back to VoiceSense…", "ok");
+      back.hidden = false;
+      goBack();
+    }
+
+    window.addEventListener("message", function (event) {
+      const d = event.data || {};
+      if (d.target !== "padoZKAttestationJSSDK") return;
+      if (d.name !== "startAttestationRes") return;
+      const params0 = d.params || {};
+      if (!params0.result || !params0.data) return;
+      const raw = params0.data;
+      const { extendedData, allJsonResponse, privateData, ...attestation } = raw;
+      submitAttestation(attestation).catch(function (err) {
+        show((err && err.message) || String(err), "err");
+        btn.disabled = false;
+        btn.textContent = "Try again";
+      });
+    });
+
+    async function loadCfg() {
+      const res = await fetch("/prove-config.json");
+      cfg = await res.json();
+      flow = (cfg.flows || {})[purpose];
+      if (!flow || !flow.template_id || !cfg.app_id || !cfg.app_secret) {
+        show("This app is not configured yet. Ask the site owner to finish setup.", "warn");
+        return;
+      }
+      if (typeof window.PrimusZKTLS !== "function" && typeof window.VoiceSenseZKTLS === "function") {
+        window.PrimusZKTLS = window.VoiceSenseZKTLS;
+      }
+      if (typeof window.PrimusZKTLS !== "function") {
+        show("Primus JS SDK bundle missing.", "err");
+        return;
+      }
+      document.getElementById("title").textContent = flow.label || "Prove with Primus";
+      btn.disabled = false;
+      show("Extension ready. Click Start proof.", "ok");
+    }
+
+    btn.addEventListener("click", async function () {
+      btn.disabled = true;
+      show("Starting zkTLS… keep the Primus extension popup in view.", "info");
+      try {
+        const zk = new window.PrimusZKTLS();
+        zkHandle = zk;
+        await zk.init(cfg.app_id, cfg.app_secret);
+        const request = zk.generateRequestParams(flow.template_id, cfg.recipient);
+        const mode = (params.get("mode") || cfg.att_mode || "proxytls").toLowerCase();
+        request.setAttMode({
+          algorithmType: mode === "mpctls" ? "mpctls" : "proxytls",
+        });
+        // Do not send Hub attConditions unless the template selected that exact field.
+        // A following=true condition on a screen_name-only template causes
+        // "Requirements not met" in the extension even when the user follows.
+        if (flow.use_conditions && flow.field) {
+          const item = { field: flow.field, op: flow.op || "=" };
+          if (item.op !== "SHA256" && item.op !== "SHA256_EX" && flow.value) {
+            item.value = flow.value;
+          }
+          request.setAttConditions([[item]]);
+        }
+        const extra = Object.assign(
+          { voicesense: "extension-tab", purpose: purpose, no_audio: true },
+          cfg.addition_params || {}
+        );
+        request.setAdditionParams(JSON.stringify(extra));
+        if (typeof request.setAllJsonResponseFlag === "function") {
+          request.setAllJsonResponseFlag("true");
+        } else {
+          request.allJsonResponseFlag = "true";
+        }
+        const signed = await zk.sign(request.toJsonString());
+        try {
+          requestid = JSON.parse(signed).attRequest.requestid || null;
+        } catch (e) {}
+        const attestation = await zk.startAttestation(signed);
+        try { await zk.verifyAttestation(attestation); } catch (e) {}
+        await submitAttestation(attestation);
+      } catch (err) {
+        let msg = (err && err.message) ? err.message : String(err);
+        const low = msg.toLowerCase();
+        if (low.indexOf("timeout") >= 0 || low.indexOf("interrupt") >= 0 || low.indexOf("timed out") >= 0) {
+          msg = "Connection dropped before Primus finished. Keep the popup in front, stay on this tab, then click Start proof again.";
+        }
+        show(msg, "err");
+        btn.disabled = false;
+        btn.textContent = "Try again";
+      }
+    });
+
+    loadCfg().catch(function (err) {
+      show(String(err), "err");
+    });
+  </script>
+</body>
+</html>

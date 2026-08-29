@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VoiceSense · PD Voice Screening</title>
+  <meta name="description" content="Research platform for voice-based Parkinson's screening. English & Bangla. Not a medical diagnosis." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #070b14;
+      --text: #e8eef9;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --card: rgba(16,24,40,.72);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1000px 500px at 15% -10%, rgba(56,189,248,.22), transparent 55%),
+        radial-gradient(800px 480px at 90% 0%, rgba(129,140,248,.18), transparent 50%),
+        radial-gradient(700px 400px at 50% 100%, rgba(52,211,153,.1), transparent 50%),
+        linear-gradient(165deg, #070b14, #0b1220 50%, #0a1020);
+    }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 4rem 1.25rem 3rem; }
+    .kicker {
+      display: inline-flex; align-items: center; gap: .5rem;
+      color: var(--accent); letter-spacing: .14em; text-transform: uppercase;
+      font-size: .78rem; font-weight: 700;
+    }
+    .kicker i {
+      width: 8px; height: 8px; border-radius: 50%; background: #34d399;
+      box-shadow: 0 0 12px #34d399; display: inline-block;
+    }
+    h1 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
+      line-height: 1.08;
+      margin: .8rem 0 1rem;
+    }
+    h1 em {
+      font-style: italic;
+      background: linear-gradient(90deg, #7dd3fc, #a5b4fc, #6ee7b7);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .sub { color: var(--muted); font-size: 1.08rem; max-width: 56ch; line-height: 1.6; }
+    .grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem; margin: 2.2rem 0 1.6rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(148,163,184,.14);
+      border-radius: 18px;
+      padding: 1.15rem 1.2rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 16px 50px rgba(0,0,0,.28);
+    }
+    .card h3 { margin: 0 0 .45rem; font-size: 1rem; }
+    .card p { margin: 0; color: var(--muted); font-size: .92rem; line-height: 1.5; }
+    .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.5rem; }
+    a.btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: .85rem 1.2rem; border-radius: 12px; font-weight: 700;
+      text-decoration: none; color: #fff;
+      background: linear-gradient(135deg, #0ea5e9, #6366f1);
+      box-shadow: 0 12px 30px rgba(14,165,233,.28);
+    }
+    a.btn.ghost {
+      background: transparent; color: var(--text);
+      border: 1px solid rgba(148,163,184,.25);
+      box-shadow: none;
+    }
+    .note {
+      margin-top: 2rem; padding: 1rem 1.1rem; border-radius: 14px;
+      border: 1px solid rgba(251,191,36,.25);
+      background: rgba(251,191,36,.08);
+      color: #fde68a; font-size: .92rem; line-height: 1.5;
+    }
+    footer {
+      margin-top: 3rem; color: var(--muted); font-size: .82rem;
+      border-top: 1px solid rgba(148,163,184,.1); padding-top: 1rem;
+    }
+    code {
+      background: rgba(15,23,42,.8); padding: .12rem .35rem; border-radius: 6px;
+      font-size: .86em;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="kicker"><i></i> VoiceSense Research</div>
+    <h1>Voice-based <em>Parkinson’s</em> screening</h1>
+    <p class="sub">
+      Explainable machine learning for English &amp; Bangla voice patterns.
+      Built for thesis research — screening support only, never a clinical diagnosis.
+    </p>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Live voice studio</h3>
+        <p>Record or upload sustained vowels. Clinical acoustic features + conservative thresholds.</p>
+      </div>
+      <div class="card">
+        <h3>On-device by default</h3>
+        <p>Run locally so the clip never hits a VoiceSense server. Successful analysis discards the recording. Receipts contain no WAV.</p>
+      </div>
+      <div class="card">
+        <h3>Optional Primus enrollment</h3>
+        <p>zkTLS uniqueness, eligibility, researcher gate, and model-bundle integrity hash. Primus never sees the voice or P(PD).</p>
+      </div>
+      <div class="card">
+        <h3>Feature lab</h3>
+        <p>UCI English &amp; BenSParX Bengali feature-table models with detailed explanations.</p>
+      </div>
+      <div class="card">
+        <h3>Responsible design</h3>
+        <p>Subject-aware training, quality gates, and Uncertain band to reduce false PD flags.</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="btn" href="https://github.com/Arafat128/VoiceSense-PD" target="_blank" rel="noreferrer">View GitHub repo</a>
+      <a class="btn ghost" href="#run">How to run the full app</a>
+    </div>
+
+    <div class="note" id="run">
+      <strong>Why not full ML on Vercel?</strong>
+      The screening engine uses Streamlit + scikit-learn + librosa + Praat (parselmouth) and multi‑MB models.
+      Vercel serverless is not suitable for that stack. This landing page is hosted on Vercel;
+      run the full interactive app locally (or Streamlit Cloud) from the GitHub repository:
+      <br/><br/>
+      <code>git clone https://github.com/Arafat128/VoiceSense-PD.git</code><br/>
+      <code>cd VoiceSense-PD</code><br/>
+      <code>pip install -r requirements.txt</code><br/>
+      <code>python -m streamlit run app/streamlit_app.py</code>
+    </div>
+
+    <footer>
+      VoiceSense · Research prototype · Not for medical diagnosis · © thesis project
+    </footer>
+  </div>
+</body>
+</html>

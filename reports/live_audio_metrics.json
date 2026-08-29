@@ -1,0 +1,166 @@
+{
+  "dataset": "Italian_PD_Voice (all HC vs PD)",
+  "n_samples": 186,
+  "n_subjects": 61,
+  "class_counts": {
+    "PD": 77,
+    "HC": 109
+  },
+  "n_features": 33,
+  "split": {
+    "method": "subject-stratified Group holdout 80/20",
+    "train_samples": 152,
+    "test_samples": 34,
+    "train_subjects": 49,
+    "test_subjects": 12
+  },
+  "models": {
+    "random_forest": {
+      "metrics": {
+        "accuracy": 0.9705882352941176,
+        "precision": 0.9285714285714286,
+        "recall": 1.0,
+        "f1": 0.9629629629629629,
+        "roc_auc": 0.9926739926739926,
+        "confusion_matrix": [
+          [
+            20,
+            1
+          ],
+          [
+            0,
+            13
+          ]
+        ],
+        "classification_report": "              precision    recall  f1-score   support\n\n          HC     1.0000    0.9524    0.9756        21\n          PD     0.9286    1.0000    0.9630        13\n\n    accuracy                         0.9706        34\n   macro avg     0.9643    0.9762    0.9693        34\nweighted avg     0.9727    0.9706    0.9708        34\n",
+        "cv_f1_mean": 0.8992500111807512,
+        "cv_f1_std": 0.08140523991115915
+      },
+      "artifact": "D:\\fugu\\Thesis\\pd_screening\\models\\live_audio_italian__random_forest.joblib",
+      "top_features": [
+        {
+          "feature": "praat_hnr",
+          "importance": 0.13587299933270555
+        },
+        {
+          "feature": "praat_nhr",
+          "importance": 0.1334447150099566
+        },
+        {
+          "feature": "praat_mean_autocorr_harmonicity",
+          "importance": 0.12402818699268901
+        },
+        {
+          "feature": "praat_apq5",
+          "importance": 0.0779422716670892
+        },
+        {
+          "feature": "praat_apq3",
+          "importance": 0.07031094664335209
+        },
+        {
+          "feature": "praat_dda",
+          "importance": 0.06817751826246471
+        },
+        {
+          "feature": "praat_ppq5_jitter",
+          "importance": 0.04308600904195732
+        },
+        {
+          "feature": "praat_min_intensity",
+          "importance": 0.0413234614170549
+        },
+        {
+          "feature": "intensity_range",
+          "importance": 0.0410048738115466
+        },
+        {
+          "feature": "praat_f0_max",
+          "importance": 0.029447280092541696
+        },
+        {
+          "feature": "praat_local_shimmer",
+          "importance": 0.020619988845772343
+        },
+        {
+          "feature": "f0_range",
+          "importance": 0.020613402286449017
+        },
+        {
+          "feature": "praat_local_abs_jitter",
+          "importance": 0.016738864081207852
+        },
+        {
+          "feature": "praat_local_jitter",
+          "importance": 0.016427463371343654
+        },
+        {
+          "feature": "praat_local_db_shimmer",
+          "importance": 0.015891855097106628
+        }
+      ]
+    },
+    "svm_rbf": {
+      "metrics": {
+        "accuracy": 0.8823529411764706,
+        "precision": 0.9090909090909091,
+        "recall": 0.7692307692307693,
+        "f1": 0.8333333333333334,
+        "roc_auc": 0.9706959706959707,
+        "confusion_matrix": [
+          [
+            20,
+            1
+          ],
+          [
+            3,
+            10
+          ]
+        ],
+        "classification_report": "              precision    recall  f1-score   support\n\n          HC     0.8696    0.9524    0.9091        21\n          PD     0.9091    0.7692    0.8333        13\n\n    accuracy                         0.8824        34\n   macro avg     0.8893    0.8608    0.8712        34\nweighted avg     0.8847    0.8824    0.8801        34\n",
+        "cv_f1_mean": 0.9154144335456905,
+        "cv_f1_std": 0.04618984279471019
+      },
+      "artifact": "D:\\fugu\\Thesis\\pd_screening\\models\\live_audio_italian__svm_rbf.joblib",
+      "top_features": []
+    }
+  },
+  "disclaimer": "This tool is a research screening support system only. It is NOT a medical diagnosis. Final decisions must be made by qualified clinicians.",
+  "feature_names": [
+    "praat_f0_mean",
+    "praat_f0_min",
+    "praat_f0_max",
+    "praat_f0_std",
+    "praat_local_jitter",
+    "praat_local_abs_jitter",
+    "praat_rap_jitter",
+    "praat_ppq5_jitter",
+    "praat_ddp_jitter",
+    "praat_local_shimmer",
+    "praat_local_db_shimmer",
+    "praat_apq3",
+    "praat_apq5",
+    "praat_apq11",
+    "praat_dda",
+    "praat_hnr",
+    "praat_nhr",
+    "praat_mean_period",
+    "praat_std_period",
+    "praat_mean_intensity",
+    "praat_min_intensity",
+    "praat_max_intensity",
+    "praat_mean_autocorr_harmonicity",
+    "praat_ppe",
+    "praat_rpde",
+    "praat_dfa",
+    "praat_spread1",
+    "praat_spread2",
+    "praat_d2",
+    "f0_cv",
+    "f0_range",
+    "intensity_range",
+    "jitter_shimmer_product"
+  ],
+  "best_model": "random_forest",
+  "app_default_model": "random_forest"
+}

@@ -1,0 +1,208 @@
+{
+  "dataset_key": "bengali_bensparx",
+  "display_name": "BenSParX (Bengali)",
+  "language": "Bengali",
+  "n_samples": 900,
+  "n_features": 71,
+  "n_subjects": 120,
+  "class_counts": {
+    "PD": 450,
+    "HC": 450
+  },
+  "split": {
+    "train_samples": 723,
+    "test_samples": 177,
+    "train_subjects": 96,
+    "test_subjects": 24,
+    "method": "GroupShuffleSplit 80/20 (subject/speaker aware)",
+    "random_state": 42
+  },
+  "models": {
+    "random_forest": {
+      "metrics": {
+        "accuracy": 0.9378531073446328,
+        "precision": 0.9534883720930233,
+        "recall": 0.9213483146067416,
+        "f1": 0.9371428571428572,
+        "confusion_matrix": [
+          [
+            84,
+            4
+          ],
+          [
+            7,
+            82
+          ]
+        ],
+        "roc_auc": 0.9866573033707865,
+        "cv_f1_mean": 0.9305267038834728,
+        "cv_f1_std": 0.02518959899785019,
+        "classification_report": "              precision    recall  f1-score   support\n\n          HC     0.9231    0.9545    0.9385        88\n          PD     0.9535    0.9213    0.9371        89\n\n    accuracy                         0.9379       177\n   macro avg     0.9383    0.9379    0.9378       177\nweighted avg     0.9384    0.9379    0.9378       177\n"
+      },
+      "artifact": "D:\\fugu\\Thesis\\pd_screening\\models\\bengali_bensparx__random_forest.joblib",
+      "top_features": [
+        {
+          "feature": "std_delta_delta_log_energy",
+          "importance": 0.05692589176205828
+        },
+        {
+          "feature": "std_delta_log_energy",
+          "importance": 0.050397731963668806
+        },
+        {
+          "feature": "AutoCorrHarmonicity",
+          "importance": 0.04400896375846148
+        },
+        {
+          "feature": "Delta_MFCC_2",
+          "importance": 0.04005397781127678
+        },
+        {
+          "feature": "MFCC_2",
+          "importance": 0.037740924690334327
+        },
+        {
+          "feature": "HNR",
+          "importance": 0.028657761636187416
+        },
+        {
+          "feature": "std_Log_energy",
+          "importance": 0.024114345513575962
+        },
+        {
+          "feature": "locAbsJitter",
+          "importance": 0.02370916279976545
+        },
+        {
+          "feature": "apq11Shimmer",
+          "importance": 0.02116964938222226
+        },
+        {
+          "feature": "MFCC_3",
+          "importance": 0.02086934984391418
+        },
+        {
+          "feature": "minIntensity",
+          "importance": 0.020424991536966957
+        },
+        {
+          "feature": "maxPitch",
+          "importance": 0.019525406393787317
+        },
+        {
+          "feature": "meanPeriodPulses",
+          "importance": 0.018750665014453216
+        },
+        {
+          "feature": "DeltaDelta_MFCC_8",
+          "importance": 0.018237083673753873
+        },
+        {
+          "feature": "Delta_MFCC_3",
+          "importance": 0.01782791613938492
+        }
+      ]
+    },
+    "svm_rbf": {
+      "metrics": {
+        "accuracy": 0.9322033898305084,
+        "precision": 0.963855421686747,
+        "recall": 0.898876404494382,
+        "f1": 0.9302325581395349,
+        "confusion_matrix": [
+          [
+            85,
+            3
+          ],
+          [
+            9,
+            80
+          ]
+        ],
+        "roc_auc": 0.9666751787538305,
+        "cv_f1_mean": 0.9321339244623209,
+        "cv_f1_std": 0.020095131038323343,
+        "classification_report": "              precision    recall  f1-score   support\n\n          HC     0.9043    0.9659    0.9341        88\n          PD     0.9639    0.8989    0.9302        89\n\n    accuracy                         0.9322       177\n   macro avg     0.9341    0.9324    0.9321       177\nweighted avg     0.9342    0.9322    0.9321       177\n"
+      },
+      "artifact": "D:\\fugu\\Thesis\\pd_screening\\models\\bengali_bensparx__svm_rbf.joblib",
+      "top_features": []
+    }
+  },
+  "disclaimer": "This tool is a research screening support system only. It is NOT a medical diagnosis. Final decisions must be made by qualified clinicians.",
+  "feature_names": [
+    "numPulses",
+    "numPeriodsPulses",
+    "meanPeriodPulses",
+    "stdDevPeriodPulses",
+    "locPctJitter",
+    "locAbsJitter",
+    "rapJitter",
+    "ppq5Jitter",
+    "ddpJitter",
+    "locShimmer",
+    "locDbShimmer",
+    "apq3Shimmer",
+    "apq5Shimmer",
+    "apq11Shimmer",
+    "ddaShimmer",
+    "AutoCorrHarmonicity",
+    "meanAutoCorrHarmonicity",
+    "NHR",
+    "minIntensity",
+    "maxIntensity",
+    "meanIntensity",
+    "f1",
+    "f2",
+    "f3",
+    "f4",
+    "maxPitch",
+    "HNR",
+    "meanPitch",
+    "mean_Log_energy",
+    "Delta_MFCC_0",
+    "Delta_MFCC_1",
+    "Delta_MFCC_2",
+    "Delta_MFCC_3",
+    "Delta_MFCC_4",
+    "Delta_MFCC_5",
+    "Delta_MFCC_6",
+    "Delta_MFCC_7",
+    "Delta_MFCC_8",
+    "Delta_MFCC_9",
+    "Delta_MFCC_10",
+    "Delta_MFCC_11",
+    "Delta_MFCC_12",
+    "DeltaDelta_MFCC_0",
+    "DeltaDelta_MFCC_1",
+    "DeltaDelta_MFCC_2",
+    "DeltaDelta_MFCC_3",
+    "DeltaDelta_MFCC_4",
+    "DeltaDelta_MFCC_5",
+    "DeltaDelta_MFCC_6",
+    "DeltaDelta_MFCC_7",
+    "DeltaDelta_MFCC_8",
+    "DeltaDelta_MFCC_9",
+    "DeltaDelta_MFCC_10",
+    "DeltaDelta_MFCC_11",
+    "DeltaDelta_MFCC_12",
+    "std_Log_energy",
+    "std_delta_log_energy",
+    "std_delta_delta_log_energy",
+    "MFCC_0",
+    "MFCC_1",
+    "MFCC_2",
+    "MFCC_3",
+    "MFCC_4",
+    "MFCC_5",
+    "MFCC_6",
+    "MFCC_7",
+    "MFCC_8",
+    "MFCC_9",
+    "MFCC_10",
+    "MFCC_11",
+    "MFCC_12"
+  ],
+  "best_model": "random_forest",
+  "holdout_samples_path": "D:\\fugu\\Thesis\\pd_screening\\models\\bengali_bensparx__holdout_samples.csv",
+  "app_default_model": "random_forest"
+}

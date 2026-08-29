@@ -1,0 +1,16 @@
+{
+  "name": "voicesense-primus-enrollment",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Bundles @primuslabs/zktls-js-sdk for the VoiceSense enrollment iframe.",
+  "scripts": {
+    "build": "vite build",
+    "doctor": "node -e \"const fs=require('fs'); const p='../app/primus_enroll/frontend/vendor/zktls-bundle.js'; const t=fs.readFileSync(p,'utf8'); if(!t.includes('PrimusZKTLS') && !t.includes('Primus')) { console.error('SDK bundle missing Primus exports'); process.exit(1);} console.log('ok', p, t.length); \""
+  },
+  "dependencies": {
+    "@primuslabs/zktls-js-sdk": "latest"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}

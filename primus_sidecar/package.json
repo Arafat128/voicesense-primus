@@ -1,0 +1,9 @@
+{
+  "name": "voicesense-primus-sidecar",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Optional zkTLS-core proof of public GitHub metadata. No audio.",
+  "dependencies": {
+    "@primuslabs/zktls-core-sdk": "latest"
+  }
+}
