@@ -12,3 +12,7 @@ primus_sidecar/node_modules/
 *.egg-info/
 .streamlit/secrets.toml
 landing/vercel.json
+*.pem
+*.key
+credentials.json
+.envrc

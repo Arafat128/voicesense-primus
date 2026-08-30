@@ -20,7 +20,9 @@ python -m pip install -r requirements.txt
 python -m streamlit run app/streamlit_app.py --server.port 8502
 ```
 
-Open **http://localhost:8502**. This GitHub repo is the Primus-integrated copy, not the original thesis tree.
+Open **http://localhost:8502**. This repository is a Primus-integrated copy of the thesis screening app.
+
+Do **not** commit `.env`. Primus `appSecret` and the operator unlock code stay on your machine.
 
 ### Train models (if needed)
 
@@ -31,9 +33,7 @@ python -m src.train_audio    # live acoustic model (Italian WAVs required under 
 
 Datasets are expected under `../datasets/` relative to this project (see thesis folder layout), or adjust paths in `src/config.py` / `src/train_audio.py`.
 
-## This copy (Primus Labs workspace)
-
-This tree is a **copy** of the original thesis app. Work here so `D:\tmp\VoiceSense-PD` stays untouched.
+## Primus layer
 
 Primus is wired in as an **identity / provenance / integrity** layer:
 
@@ -58,7 +58,7 @@ Local Streamlit is the supported privacy mode:
 
 **Streamlit Community Cloud is not on-device.** The browser must upload audio to the host. The app shows a warning in that case.
 
-Enrollment receipts (fingerprints only) live in `.voicesense_local/` inside this copy, not in the original thesis app.
+Enrollment receipts (fingerprints only) live in `.voicesense_local/` (gitignored).
 
 ## Optional Primus enrollment
 
@@ -75,7 +75,7 @@ npm run build
 ```
 
 4. Install the [Primus extension](https://chromewebstore.google.com/detail/primus/oeiomhmbaapihbilkfkhmlajkeegnjhe).
-5. Open the **Privacy & enrollment** tab.
+5. Run locally and prove follow from **Live voice studio**.
 
 The SDK bundle is already built under `app/primus_enroll/frontend/vendor/` in this tree. Rebuild it after upgrading `@primuslabs/zktls-js-sdk`.
 
@@ -112,16 +112,18 @@ src/enrollment.py      # fingerprint-only enrollment records
 enrollment/            # Vite bundle for @primuslabs/zktls-js-sdk
 models/                # trained joblib artifacts
 reports/               # metrics JSON
-landing/               # static Vercel marketing page
+landing/               # static marketing page
 ```
 
 ## Deploy notes
 
+This app is meant to run **locally** (Streamlit + prove server). Do not put `PRIMUS_APP_SECRET` or `VOICESENSE_OPERATOR_PIN` in a public host or CI.
+
 | Target | Status |
 |--------|--------|
 | **Local Streamlit** | Full app (recommended) |
-| **Streamlit Community Cloud** | Possible if system audio libs available |
-| **Vercel** | Landing page only — ML stack is not serverless-friendly |
+| **Streamlit Community Cloud** | Possible if system audio libs available — do not put Hub secrets in the public UI |
+| **Vercel** | Not used for this repo. The ML stack is not serverless-friendly |
 
 ## Citation / data
 

@@ -127,20 +127,19 @@
     </div>
 
     <div class="actions">
-      <a class="btn" href="https://github.com/Arafat128/VoiceSense-PD" target="_blank" rel="noreferrer">View GitHub repo</a>
+      <a class="btn" href="https://github.com/Arafat128/voicesense-primus" target="_blank" rel="noreferrer">View GitHub repo</a>
       <a class="btn ghost" href="#run">How to run the full app</a>
     </div>
 
     <div class="note" id="run">
-      <strong>Why not full ML on Vercel?</strong>
+      <strong>Run locally.</strong>
       The screening engine uses Streamlit + scikit-learn + librosa + Praat (parselmouth) and multi‑MB models.
-      Vercel serverless is not suitable for that stack. This landing page is hosted on Vercel;
-      run the full interactive app locally (or Streamlit Cloud) from the GitHub repository:
+      That stack is not a good fit for serverless hosts. Clone the repo and run it on your machine:
       <br/><br/>
-      <code>git clone https://github.com/Arafat128/VoiceSense-PD.git</code><br/>
-      <code>cd VoiceSense-PD</code><br/>
+      <code>git clone https://github.com/Arafat128/voicesense-primus.git</code><br/>
+      <code>cd voicesense-primus</code><br/>
       <code>pip install -r requirements.txt</code><br/>
-      <code>python -m streamlit run app/streamlit_app.py</code>
+      <code>python -m streamlit run app/streamlit_app.py --server.port 8502</code>
     </div>
 
     <footer>
