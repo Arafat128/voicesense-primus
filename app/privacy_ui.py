@@ -321,8 +321,9 @@ def render_follow_gate(*, key_prefix: str = "live") -> bool:
         disabled=not ready,
     )
     st.caption(
-        "Opens a new tab. Stay logged into X and keep the Primus popup in front. "
-        "When it succeeds you will return here automatically."
+        "Opens a proof tab. Stay logged into X and keep the Primus popup in front. "
+        "When it succeeds, close that proof tab — this VoiceSense tab unlocks here. "
+        "Do not open a second VoiceSense window."
     )
     st.caption("Access is only for this browser tab. Another browser must prove follow separately.")
 

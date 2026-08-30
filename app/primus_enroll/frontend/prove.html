@@ -21,7 +21,7 @@
     <div id="status"></div>
     <button id="prove" disabled>Start proof</button>
     <p class="hint" id="back" hidden>
-      Proof saved. Return to VoiceSense on port 8502 — it will pick this up.
+      Proof saved. Close this tab. Your original VoiceSense tab will unlock on its own.
     </p>
   </div>
   <script src="./vendor/zktls-bundle.js"></script>
@@ -43,24 +43,14 @@
     }
 
     function goBack() {
-      show("Proof saved. Switching back to your VoiceSense tab…", "ok");
+      show("Proof saved. Close this tab — VoiceSense is unlocking in the tab you started from.", "ok");
       back.hidden = false;
       try {
         if (window.opener && !window.opener.closed) {
           window.opener.focus();
-          window.close();
         }
       } catch (e) {}
-      const dest = (cfg && cfg.return_url) || (
-        "http://localhost:8502/?verified=1" + (sid ? "&sid=" + encodeURIComponent(sid) : "")
-      );
-      setTimeout(function () {
-        if (window.opener && !window.opener.closed) {
-          try { window.close(); } catch (e2) {}
-          return;
-        }
-        window.location.replace(dest);
-      }, 500);
+      try { window.close(); } catch (e2) {}
     }
 
     function followFrom(obj) {
